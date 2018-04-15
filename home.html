@@ -1,165 +1,287 @@
-<!doctype html>
-<html class="no-js" lang="">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
-
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <style>
-            body {
-                padding-top: 50px;
-                padding-bottom: 20px;
-            }
-        </style>
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/main.css">
-
-        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
-    </head>
-    <body>
-
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>MeetPoint</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <style>
+        #map {
+            height: 100%;
+        }
+        html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        }
+        /* The location pointed to by the popup tip. */
+        .popup-tip-anchor {
+        height: 0;
+        position: absolute;
+        /* The max width of the info window. */
+        width: 200px;
+        }
+        /* The bubble is anchored above the tip. */
+        .popup-bubble-anchor {
+        position: absolute;
+        width: 100%;
+        bottom: /* TIP_HEIGHT= */ 8px;
+        left: 0;
+        }
+        /* Draw the tip. */
+        .popup-bubble-anchor::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        /* Center the tip horizontally. */
+        transform: translate(-50%, 0);
+        /* The tip is a https://css-tricks.com/snippets/css/css-triangle/ */
+        width: 0;
+        height: 0;
+        /* The tip is 8px high, and 12px wide. */
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: /* TIP_HEIGHT= */ 8px solid white;
+        }
+        /* The popup bubble itself. */
+        .popup-bubble-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(-50%, -100%);
+        /* Style the info window. */
+        background-color: white;
+        padding: 5px;
+        border-radius: 5px;
+        font-family: sans-serif;
+        overflow-y: auto;
+        max-height: 60px;
+        box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.5);
+        }
+    </style>
+  </head>
+  <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
+        <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <img style="max-width:220px; margin-top: 12px; margin-left: 80px;" src="img/logo_name_white.png">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        </button>
+        <img style="max-width:220px; margin-top: 12px; margin-left: 80px;" src="img/logo_name_white.png">
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form">
-    <div class="checkbox">
- 		<label class="text-primary"><input  type="checkbox" value="">Help</label>
-    </div>
-    <div class="checkbox">
-  		<label class="text-primary"><input type="checkbox" value="">entertainment</label>
-    </div>
-
-            <button type="submit" class="btn btn-success">Accept</button>
-          </form>
-        </div><!--/.navbar-collapse -->
-      </div>
+        <form class="navbar-form navbar-right" role="form">
+        <div class="checkbox">
+        <label class="text-primary"><input  type="checkbox" value="">Help</label>
+        </div>
+        <div class="checkbox">
+        <label class="text-primary"><input type="checkbox" value="">entertainment</label>
+        </div>
+        <button type="submit" class="btn btn-success">Accept</button>
+        </form>
+        </div>
+        </div>
     </nav>
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Acá va el mapa</h1>
-        
-      </div>
+    <div id="map"></div>
+    <div id="content_1">
+    <b><font color="red">[EMERGENCY]</font></b><br/> 
+    Out of fuel!<br/>
+    <a href="https://m.me/join/AbajvkAhBni2H-85">Join</a>
     </div>
+    <div id="content_2">
+    <b><font color="yellow">[ENTERTAINMENT]</font></b><br/> 
+    Extra ticket to Avengers!<br/>
+    <a href="https://m.me/join/AbajvkAhBni2H-85">Join</a>
+    </div>
+    <div id="content_3">
+    <b><font color="blue">[EVENT]</font></b><br/> 
+    Facebook Hackathon!<br/>
+    <a href="https://m.me/join/AbajvkAhBni2H-85">Join</a>
+    </div>
+    <script>
+        var map, popup, Popup;
 
-   
-   <nav class="navbar navbar-fixed-bottom navbar-inverse " role="navigation">
-      <div class="container">
+        /** Initializes the map and the custom popup. */
+        function initMap() {
+          definePopupClass();
+
+          map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 16,
+          });
+
+          popup_1 = new Popup(
+              new google.maps.LatLng(-33.401955, -70.586392),
+              document.getElementById('content_1')).setMap(map);
+          popup_2 = new Popup(
+              new google.maps.LatLng(-33.402371, -70.578557),
+              document.getElementById('content_2')).setMap(map);
+          popup_3 = new Popup(
+              new google.maps.LatLng(-33.402619, -70.584204),
+              document.getElementById('content_3')).setMap(map);
+
+          if (navigator.geolocation) {
+                 navigator.geolocation.getCurrentPosition(function (position) {
+                     initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                     map.setCenter(initialLocation);
+                 });
+             }
+        }
+
+        /** Defines the Popup class. */
+        function definePopupClass() {
+          /**
+           * A customized popup on the map.
+           * @param {!google.maps.LatLng} position
+           * @param {!Element} content
+           * @constructor
+           * @extends {google.maps.OverlayView}
+           */
+          Popup = function(position, content) {
+            this.position = position;
+
+            content.classList.add('popup-bubble-content');
+
+            var pixelOffset = document.createElement('div');
+            pixelOffset.classList.add('popup-bubble-anchor');
+            pixelOffset.appendChild(content);
+
+            this.anchor = document.createElement('div');
+            this.anchor.classList.add('popup-tip-anchor');
+            this.anchor.appendChild(pixelOffset);
+
+            // Optionally stop clicks, etc., from bubbling up to the map.
+            this.stopEventPropagation();
+          };
+          // NOTE: google.maps.OverlayView is only defined once the Maps API has
+          // loaded. That is why Popup is defined inside initMap().
+          Popup.prototype = Object.create(google.maps.OverlayView.prototype);
+
+          /** Called when the popup is added to the map. */
+          Popup.prototype.onAdd = function() {
+            this.getPanes().floatPane.appendChild(this.anchor);
+          };
+
+          /** Called when the popup is removed from the map. */
+          Popup.prototype.onRemove = function() {
+            if (this.anchor.parentElement) {
+              this.anchor.parentElement.removeChild(this.anchor);
+            }
+          };
+
+          /** Called when the popup needs to draw itself. */
+          Popup.prototype.draw = function() {
+            var divPosition = this.getProjection().fromLatLngToDivPixel(this.position);
+            // Hide the popup when it is far out of view.
+            var display =
+                Math.abs(divPosition.x) < 4000 && Math.abs(divPosition.y) < 4000 ?
+                'block' :
+                'none';
+
+            if (display === 'block') {
+              this.anchor.style.left = divPosition.x + 'px';
+              this.anchor.style.top = divPosition.y + 'px';
+            }
+            if (this.anchor.style.display !== display) {
+              this.anchor.style.display = display;
+            }
+          };
+
+          /** Stops clicks/drags from bubbling up to the map. */
+          Popup.prototype.stopEventPropagation = function() {
+            var anchor = this.anchor;
+            anchor.style.cursor = 'auto';
+
+            ['click', 'dblclick', 'contextmenu', 'wheel', 'mousedown', 'touchstart',
+             'pointerdown']
+                .forEach(function(event) {
+                  anchor.addEventListener(event, function(e) {
+                    e.stopPropagation();
+                  });
+                });
+          };
+        }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpDr1hASekAMKNHAJIDbtyqcdXeBfDLAA&callback=initMap">
+    </script>
+
+
+    <nav class="navbar navbar-fixed-bottom navbar-inverse " role="navigation">
+        <div class="container">
         <div class="navbar-header">
-        	 <div class="col-md-4 text-center">
-				<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalNorm">
-				<a href="#">
-					<span class="glyphicon glyphicon-plus" style="color:white"></span>
-				</a>
-				</button>
-			</div>    
-
+        <div class="col-md-4 text-center">
+        <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalNorm">
+            <a href="#"><span class="glyphicon glyphicon-plus" style="color:white"></span></a>
+        </button>
+        </div>    
         </div>
-
-      </div>
+        </div>
     </nav>
 
-
-
-
-
-
-
-
-<!-- Button trigger modal -->
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalNorm">
-    Launch Normal Form
-</button>
-
+    <!-- Fin Mapa -->
 <!-- Modal -->
-<div class="modal fade" id="myModalNorm" tabindex="-1" role="dialog" 
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="close" 
-                   data-dismiss="modal">
-                       <span aria-hidden="true">&times;</span>
-                       <span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">
-                    Modal title
-                </h4>
-            </div>
-            
-            <!-- Modal Body -->
-            <div class="modal-body">
-                
-                <form role="form">
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                      <input type="email" class="form-control"
-                      id="exampleInputEmail1" placeholder="Enter email"/>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                      <input type="password" class="form-control"
-                          id="exampleInputPassword1" placeholder="Password"/>
-                  </div>
-                  <div class="checkbox">
-                    <label>
-                        <input type="checkbox"/> Check me out
-                    </label>
-                  </div>
-                  <button type="submit" class="btn btn-default">Submit</button>
-                </form>
-                
-                
-            </div>
-            
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                            Close
-                </button>
-                <button type="button" class="btn btn-primary">
-                    Save changes
-                </button>
-            </div>
-        </div>
+    <div class="modal fade" id="myModalNorm" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true">
+       <div class="modal-dialog">
+           <div class="modal-content">
+               <!-- Modal Header -->
+               <div class="modal-header">
+                   <button type="button" class="close"
+                      data-dismiss="modal">
+                          <span aria-hidden="true">&times;</span>
+                          <span class="sr-only">Close</span>
+                   </button>
+                   <h4 class="modal-title" id="myModalLabel">
+                       New event
+                   </h4>
+               </div>
+               
+               <!-- Modal Body -->
+               <div class="modal-body">
+                   <form role="form">
+                     <div class="form-group">
+                       <label for="exampleInputEmail1">Name of group</label>
+                         <input type="email" class="form-control" id="name_group" placeholder="e.g. Soccer Match 19:00"/>
+                     </div>
+                     <div class="form-group">
+                       <label for="exampleInputPassword1">Member Limit</label>
+                         <input type="password" class="form-control" id="exampleInputPassword1" placeholder="e.g 12s"/>
+                     </div>
+                     <div class="checkbox">
+                       <label>
+                           <input type="checkbox"/> Visible location
+                       </label>
+                     </div>
+                   </form>
+               </div>
+               
+               <!-- Modal Footer -->
+               <div class="modal-footer">
+                   <button type="button" class="btn btn-default"
+                           data-dismiss="modal">
+                               Close
+                   </button>
+                   <button type="button" class="btn btn-primary">
+                       Save changes
+                   </button>
+               </div>
+           </div>
+       </div>
     </div>
-</div>
 
-
-
-
-
-
-        
-      
-
-
-
-
-
-
-
-
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
-
-        <script src="js/vendor/bootstrap.min.js"></script>
-
-        <script src="js/main.js"></script>
-    </body>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>
