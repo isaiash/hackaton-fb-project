@@ -1,3 +1,13 @@
+<?php
+	session_start();
+
+	if (!isset($_SESSION['access_token'])) {
+		header('Location: login.php');
+		exit();
+	}
+?>
+
+
 <!doctype html>
 <html class="no-js" lang="">
     <head>
@@ -15,7 +25,7 @@
                 padding-bottom: 20px;
             }
         </style>
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css"> 
         <link rel="stylesheet" href="css/main.css">
 
         <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
@@ -73,6 +83,8 @@
       </div>
     </nav>
 
+<!-- 
+<img src= "<?php echo $_SESSION['userData']['picture']['url'] ?>">  -->
 
 
 
@@ -80,10 +92,8 @@
 
 
 
-<!-- Button trigger modal -->
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalNorm">
-    Launch Normal Form
-</button>
+
+
 
 <!-- Modal -->
 <div class="modal fade" id="myModalNorm" tabindex="-1" role="dialog" 
@@ -98,7 +108,7 @@
                        <span class="sr-only">Close</span>
                 </button>
                 <h4 class="modal-title" id="myModalLabel">
-                    Modal title
+                    New event
                 </h4>
             </div>
             
@@ -107,21 +117,21 @@
                 
                 <form role="form">
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
+                    <label for="exampleInputEmail1">Name of group</label>
                       <input type="email" class="form-control"
                       id="exampleInputEmail1" placeholder="Enter email"/>
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
+                    <label for="exampleInputPassword1">Limit</label>
                       <input type="password" class="form-control"
                           id="exampleInputPassword1" placeholder="Password"/>
                   </div>
                   <div class="checkbox">
                     <label>
-                        <input type="checkbox"/> Check me out
+                        <input type="checkbox"/> Visible location
                     </label>
                   </div>
-                  <button type="submit" class="btn btn-default">Submit</button>
+                  
                 </form>
                 
                 
